@@ -1,5 +1,5 @@
 labels:
-  app: estafette-extension-github-status
+  app: estafette-extension-bitbucket-status
   team: estafette-team
   language: golang
 
@@ -16,13 +16,13 @@ pipelines:
     commands:
     - cp Dockerfile ./publish
     - cp /etc/ssl/certs/ca-certificates.crt ./publish
-    - docker build -t extensions/github-status:${ESTAFETTE_BUILD_VERSION} ./publish
+    - docker build -t extensions/bitbucket-status:${ESTAFETTE_BUILD_VERSION} ./publish
 
   push-to-docker-hub:
     image: docker:17.06.0-ce
     commands:
     - docker login --username=${ESTAFETTE_DOCKER_HUB_USERNAME} --password="${ESTAFETTE_DOCKER_HUB_PASSWORD}"
-    - docker push extensions/github-status:${ESTAFETTE_BUILD_VERSION}
+    - docker push extensions/bitbucket-status:${ESTAFETTE_BUILD_VERSION}
     when:
       status == 'succeeded' &&
       branch == 'master' &&
@@ -32,6 +32,6 @@ pipelines:
     image: golang:1.8.3-alpine3.6
     commands:
     - apk --update add curl
-    - 'curl -X POST --data-urlencode ''payload={"channel": "#build-status", "username": "estafette-extension-github-status", "text": "Build ''${ESTAFETTE_BUILD_VERSION}'' for ''${ESTAFETTE_LABEL_APP}'' has failed!"}'' ${ESTAFETTE_SLACK_WEBHOOK}'
+    - 'curl -X POST --data-urlencode ''payload={"channel": "#build-status", "username": "estafette-extension-bitbucket-status", "text": "Build ''${ESTAFETTE_BUILD_VERSION}'' for ''${ESTAFETTE_LABEL_APP}'' has failed!"}'' ${ESTAFETTE_SLACK_WEBHOOK}'
     when:
       status == 'failed'
