@@ -53,7 +53,7 @@ func (gh *bitbucketAPIClientImpl) SetBuildStatus(accessToken, repoFullname, gitR
 		URL:   "https://estafette.io",
 	}
 
-	_, err = callBitbucketAPI("POST", fmt.Sprintf("https://api.bitbucket.org/2.0/repositories/%v/commit/%v/statuses/", repoFullname, gitRevision), params, "Bearer", accessToken)
+	_, err = callBitbucketAPI("POST", fmt.Sprintf("https://api.bitbucket.org/2.0/repositories/%v/commit/%v/statuses/build", repoFullname, gitRevision), params, "Bearer", accessToken)
 
 	return
 }
@@ -79,6 +79,7 @@ func callBitbucketAPI(method, url string, params interface{}, authorizationType,
 
 	// add headers
 	request.Header.Add("Authorization", fmt.Sprintf("%v %v", authorizationType, token))
+	request.Header.Add("Content-Type", "application/json")
 
 	// perform actual request
 	response, err := client.Do(request)
