@@ -35,8 +35,8 @@ type buildStatusRequestBody struct {
 func (gh *bitbucketAPIClientImpl) SetBuildStatus(accessToken, repoFullname, gitRevision, status string) (err error) {
 
 	// https://confluence.atlassian.com/bitbucket/buildstatus-resource-779295267.html
-	// estafette status: succeeded|failed
-	// bitbucket stat: INPROGRESS|SUCCESSFUL|FAILED
+	// estafette status: succeeded|failed|pending
+	// bitbucket stat: INPROGRESS|SUCCESSFUL|FAILED|STOPPED
 
 	state := "SUCCESSFUL"
 	switch status {
@@ -45,6 +45,9 @@ func (gh *bitbucketAPIClientImpl) SetBuildStatus(accessToken, repoFullname, gitR
 
 	case "failed":
 		state = "FAILED"
+
+	case "pending":
+		state = "INPROGRESS"
 	}
 
 	params := buildStatusRequestBody{
