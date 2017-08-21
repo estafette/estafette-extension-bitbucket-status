@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/rs/zerolog/log"
+	"github.com/sethgrid/pester"
 )
 
 // BitbucketAPIClient communicates with the Bitbucket api
@@ -74,7 +75,10 @@ func callBitbucketAPI(method, url string, params interface{}, authorizationType,
 	}
 
 	// create client, in order to add headers
-	client := &http.Client{}
+	client := pester.New()
+	client.MaxRetries = 3
+	client.Backoff = pester.ExponentialJitterBackoff
+	client.KeepLog = true
 	request, err := http.NewRequest(method, url, requestBody)
 	if err != nil {
 		return
