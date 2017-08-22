@@ -29,8 +29,8 @@ pipelines:
     commands:
     - docker login --username=${ESTAFETTE_DOCKER_HUB_USERNAME} --password="${ESTAFETTE_DOCKER_HUB_PASSWORD}"
     - docker push extensions/bitbucket-status:${ESTAFETTE_BUILD_VERSION}
-    - docker tag extensions/github-status:${ESTAFETTE_BUILD_VERSION} extensions/github-status:dev
-    - docker push extensions/github-status:dev
+    - docker tag extensions/bitbucket-status:${ESTAFETTE_BUILD_VERSION} extensions/bitbucket-status:dev
+    - docker push extensions/bitbucket-status:dev
     when:
       status == 'succeeded' &&
       branch == 'master' &&
