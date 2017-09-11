@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/rs/zerolog/log"
 	"github.com/sethgrid/pester"
@@ -51,10 +52,19 @@ func (gh *bitbucketAPIClientImpl) SetBuildStatus(accessToken, repoFullname, gitR
 		state = "INPROGRESS"
 	}
 
+	logsURL := fmt.Sprintf(
+		"%vlogs/%v/%v/%v/%v",
+		os.Getenv("ESTAFETTE_CI_SERVER_BASE_URL"),
+		os.Getenv("ESTAFETTE_GIT_SOURCE"),
+		os.Getenv("ESTAFETTE_GIT_NAME"),
+		os.Getenv("ESTAFETTE_GIT_BRANCH"),
+		os.Getenv("ESTAFETTE_GIT_REVISION"),
+	)
+
 	params := buildStatusRequestBody{
 		State: state,
 		Key:   "estafette",
-		URL:   "https://estafette.io",
+		URL:   logsURL,
 	}
 
 	_, err = callBitbucketAPI("POST", fmt.Sprintf("https://api.bitbucket.org/2.0/repositories/%v/commit/%v/statuses/build", repoFullname, gitRevision), params, "Bearer", accessToken)
