@@ -63,6 +63,14 @@
 			"revisionTime": "2017-08-12T23:16:31Z"
 		},
 		{
+			"checksumSHA1": "GrCvxT3h3vAVIwGe8bFAilXjgVA=",
+			"path": "github.com/rs/zerolog/log",
+			"revision": "77db4b4f350e31be66a57c332acb7721cf9ff9bb",
+			"revisionTime": "2018-05-25T01:50:57Z",
+			"version": "v1.8.0",
+			"versionExact": "v1.8.0"
+		},
+		{
 			"checksumSHA1": "Is47yO7d/2JPk+exbSEDwXTJsgo=",
 			"path": "github.com/sethgrid/pester",
 			"revision": "a86a2d88f4dc3c7dbf3a6a6bbbfb095690b834b6",
