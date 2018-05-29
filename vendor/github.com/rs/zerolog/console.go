@@ -9,7 +9,6 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"time"
 )
 
 const (
@@ -40,10 +39,7 @@ type ConsoleWriter struct {
 
 func (w ConsoleWriter) Write(p []byte) (n int, err error) {
 	var event map[string]interface{}
-	p = decodeIfBinaryToBytes(p)
-	d := json.NewDecoder(bytes.NewReader(p))
-	d.UseNumber()
-	err = d.Decode(&event)
+	err = json.Unmarshal(p, &event)
 	if err != nil {
 		return
 	}
@@ -58,7 +54,7 @@ func (w ConsoleWriter) Write(p []byte) (n int, err error) {
 		level = strings.ToUpper(l)[0:4]
 	}
 	fmt.Fprintf(buf, "%s |%s| %s",
-		colorize(formatTime(event[TimestampFieldName]), cDarkGray, !w.NoColor),
+		colorize(event[TimestampFieldName], cDarkGray, !w.NoColor),
 		colorize(level, lvlColor, !w.NoColor),
 		colorize(event[MessageFieldName], cReset, !w.NoColor))
 	fields := make([]string, 0, len(event))
@@ -79,32 +75,14 @@ func (w ConsoleWriter) Write(p []byte) (n int, err error) {
 			} else {
 				buf.WriteString(value)
 			}
-		case json.Number:
-			fmt.Fprint(buf, value)
 		default:
-			b, err := json.Marshal(value)
-			if err != nil {
-				fmt.Fprintf(buf, "[error: %v]", err)
-			} else {
-				fmt.Fprint(buf, string(b))
-			}
+			fmt.Fprint(buf, value)
 		}
 	}
 	buf.WriteByte('\n')
 	buf.WriteTo(w.Out)
 	n = len(p)
 	return
-}
-
-func formatTime(t interface{}) string {
-	switch t := t.(type) {
-	case string:
-		return t
-	case json.Number:
-		u, _ := t.Int64()
-		return time.Unix(u, 0).Format(time.RFC3339)
-	}
-	return "<nil>"
 }
 
 func colorize(s interface{}, color int, enabled bool) string {

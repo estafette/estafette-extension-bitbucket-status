@@ -5,12 +5,7 @@ import (
 	"io/ioutil"
 )
 
-var disabledLogger *Logger
-
-func init() {
-	l := New(ioutil.Discard).Level(Disabled)
-	disabledLogger = &l
-}
+var disabledLogger = New(ioutil.Discard).Level(Disabled)
 
 type ctxKey struct{}
 
@@ -29,18 +24,14 @@ func (l Logger) WithContext(ctx context.Context) context.Context {
 		*lp = l
 		return ctx
 	}
-	if l.level == Disabled {
-		// Do not store disabled logger.
-		return ctx
-	}
 	return context.WithValue(ctx, ctxKey{}, &l)
 }
 
 // Ctx returns the Logger associated with the ctx. If no logger
 // is associated, a disabled logger is returned.
-func Ctx(ctx context.Context) *Logger {
+func Ctx(ctx context.Context) Logger {
 	if l, ok := ctx.Value(ctxKey{}).(*Logger); ok {
-		return l
+		return *l
 	}
 	return disabledLogger
 }
