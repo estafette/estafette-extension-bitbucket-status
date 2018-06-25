@@ -114,11 +114,11 @@ func callBitbucketAPI(method, url string, params interface{}, authorizationType,
 	var b interface{}
 	err = json.Unmarshal(body, &b)
 	if err != nil {
-		log.Printf("Deserializing response for '%v' Bitbucket api call failed", url)
+		log.Printf("Deserializing response for '%v' Bitbucket api call failed. Body: %v. Error: %v", url, string(body), err)
 		return
 	}
 
-	log.Printf("Received response for '%v' Bitbucket api call: %v", url, body)
+	log.Printf("Received successful response for '%v' Bitbucket api call", url)
 
 	return
 }
