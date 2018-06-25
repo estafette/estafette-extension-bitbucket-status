@@ -118,7 +118,7 @@ func callBitbucketAPI(method, url string, params interface{}, authorizationType,
 		return
 	}
 
-	log.Printf("Received response for '%v' Bitbucket api call...", url)
+	log.Printf("Received response for '%v' Bitbucket api call: %v", url, body)
 
 	return
 }
