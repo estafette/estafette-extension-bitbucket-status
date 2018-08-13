@@ -67,6 +67,9 @@ releases:
 
   stable:
     stages:
+      git-clone:
+        image: extensions/git-clone:dev
+
       tag-container-image:
         image: docker:18.03.1-ce
         env:
