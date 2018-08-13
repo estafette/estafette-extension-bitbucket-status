@@ -53,6 +53,10 @@ stages:
 releases:
   beta:
     stages:
+      git-clone:
+        image: extensions/git-clone:dev
+        shallow: false
+
       tag-container-image:
         image: docker:18.03.1-ce
         env:
