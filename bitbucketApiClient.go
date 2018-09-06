@@ -57,7 +57,7 @@ func (gh *bitbucketAPIClientImpl) SetBuildStatus(accessToken, repoFullname, gitR
 		os.Getenv("ESTAFETTE_CI_SERVER_BASE_URL"),
 		os.Getenv("ESTAFETTE_GIT_SOURCE"),
 		os.Getenv("ESTAFETTE_GIT_NAME"),
-		os.Getenv("ESTAFETTE_GIT_REVISION"),
+		os.Getenv("ESTAFETTE_BUILD_ID"),
 	)
 
 	params := buildStatusRequestBody{
