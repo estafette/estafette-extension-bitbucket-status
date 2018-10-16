@@ -31,7 +31,6 @@ stages:
     - extensions
     path: ./publish
     copy:
-    - Dockerfile
     - /etc/ssl/certs/ca-certificates.crt
 
   push-to-docker-hub:
@@ -42,15 +41,6 @@ stages:
     - extensions
     tags:
     - dev
-
-  slack-notify:
-    image: extensions/slack-build-status:dev
-    webhook: estafette.secret(1zk0MnrSo6zqBubh.yttaHQKGoDrlVA9hjZJsq9zHqy_VGlJAOcmWnZE_W2jRkngzlKC634vDxOVbJfixk5MgsX48z8XX41i_tlKBnEulhdGh8hTCozpH_qZ34Lv4V7MfTC70tAFvZbY1)
-    name: ${ESTAFETTE_LABEL_APP}
-    channels:
-    - '#build-status'
-    when:
-      status == 'failed'
 
 releases:
   beta:
