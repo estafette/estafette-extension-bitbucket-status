@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/sethgrid/pester"
 )
@@ -54,10 +53,10 @@ func (gh *bitbucketAPIClientImpl) SetBuildStatus(accessToken, repoFullname, gitR
 
 	logsURL := fmt.Sprintf(
 		"%vpipelines/%v/%v/builds/%v/logs",
-		os.Getenv("ESTAFETTE_CI_SERVER_BASE_URL"),
-		os.Getenv("ESTAFETTE_GIT_SOURCE"),
-		os.Getenv("ESTAFETTE_GIT_NAME"),
-		os.Getenv("ESTAFETTE_BUILD_ID"),
+		*gitRepoSource,
+		*gitRepoSource,
+		*gitRepoFullname,
+		*estafetteBuildID,
 	)
 
 	params := buildStatusRequestBody{
