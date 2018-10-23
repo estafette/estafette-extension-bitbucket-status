@@ -53,7 +53,7 @@ func (gh *bitbucketAPIClientImpl) SetBuildStatus(accessToken, repoFullname, gitR
 
 	logsURL := fmt.Sprintf(
 		"%vpipelines/%v/%v/builds/%v/logs",
-		*estafetteBuildID,
+		*ciBaseURL,
 		*gitRepoSource,
 		repoFullname,
 		*estafetteBuildID,
