@@ -65,6 +65,8 @@ func (gh *bitbucketAPIClientImpl) SetBuildStatus(accessToken, repoFullname, gitR
 		URL:   logsURL,
 	}
 
+	log.Printf("Setting logs url %v", params.URL)
+
 	_, err = callBitbucketAPI("POST", fmt.Sprintf("https://api.bitbucket.org/2.0/repositories/%v/commit/%v/statuses/build", repoFullname, gitRevision), params, "Bearer", accessToken)
 
 	return
@@ -117,7 +119,7 @@ func callBitbucketAPI(method, url string, params interface{}, authorizationType,
 		return
 	}
 
-	log.Printf("Received successful response for '%v' Bitbucket api call", url)
+	log.Printf("Received successful response for '%v' Bitbucket api call with status code %v", url, response.StatusCode)
 
 	return
 }
