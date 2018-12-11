@@ -47,6 +47,7 @@ func main() {
 		status = *statusOverride
 	}
 
+	// get api token from injected credentials
 	var credentials []APITokenCredentials
 	err := json.Unmarshal([]byte(*apiTokenJSON), &credentials)
 	if err != nil {
