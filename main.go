@@ -27,6 +27,10 @@ var (
 	statusOverride       = kingpin.Flag("status-override", "Allow status property in manifest to override the actual build status.").Envar("ESTAFETTE_EXTENSION_STATUS").String()
 	ciBaseURL            = kingpin.Flag("estafette-ci-server-base-url", "The base url of the ci server.").Envar("ESTAFETTE_CI_SERVER_BASE_URL").Required().String()
 	estafetteBuildID     = kingpin.Flag("estafette-build-id", "The build id of this particular build.").Envar("ESTAFETTE_BUILD_ID").Required().String()
+
+	estafetteBuildVersion = kingpin.Flag("estafette-build-version", "The current build version of the Estafette pipeline.").Envar("ESTAFETTE_BUILD_VERSION").Required().String()
+	releaseName           = kingpin.Flag("release-name", "Name of the release section, automatically set by Estafette CI.").Envar("ESTAFETTE_RELEASE_NAME").String()
+	releaseAction         = kingpin.Flag("release-action", "Name of the release action, automatically set by Estafette CI.").Envar("ESTAFETTE_RELEASE_ACTION").String()
 )
 
 func main() {
@@ -59,7 +63,7 @@ func main() {
 
 	// set build status
 	bitbucketAPIClient := newBitbucketAPIClient()
-	err = bitbucketAPIClient.SetBuildStatus(credentials[0].AdditionalProperties.Token, *gitRepoFullname, *gitRevision, status)
+	err = bitbucketAPIClient.SetBuildStatus(credentials[0].AdditionalProperties.Token, *gitRepoFullname, *gitRevision, status, *estafetteBuildVersion, *releaseName, *releaseAction)
 	if err != nil {
 		log.Fatalf("Updating Bitbucket build status failed: %v", err)
 	}

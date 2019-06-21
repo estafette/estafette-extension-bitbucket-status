@@ -14,7 +14,7 @@ import (
 
 // BitbucketAPIClient communicates with the Bitbucket api
 type BitbucketAPIClient interface {
-	SetBuildStatus(string, string, string, string) error
+	SetBuildStatus(accessToken, repoFullname, gitRevision, status, buildVersion, releaseName, releaseAction string) error
 }
 
 type bitbucketAPIClientImpl struct {
@@ -33,7 +33,7 @@ type buildStatusRequestBody struct {
 }
 
 // SetBuildStatus sets the build status for a specific revision
-func (gh *bitbucketAPIClientImpl) SetBuildStatus(accessToken, repoFullname, gitRevision, status string) (err error) {
+func (gh *bitbucketAPIClientImpl) SetBuildStatus(accessToken, repoFullname, gitRevision, status, buildVersion, releaseName, releaseAction string) (err error) {
 
 	// https://confluence.atlassian.com/bitbucket/buildstatus-resource-779295267.html
 	// estafette status: succeeded|failed|pending
@@ -59,11 +59,30 @@ func (gh *bitbucketAPIClientImpl) SetBuildStatus(accessToken, repoFullname, gitR
 		*estafetteBuildID,
 	)
 
-	params := buildStatusRequestBody{
-		State: state,
-		Key:   "estafette",
-		URL:   logsURL,
+	// set description depending on status
+	description := fmt.Sprintf("Build version %v %v.", *estafetteBuildVersion, status)
+	if releaseName != "" {
+		description = fmt.Sprintf("Release %v to %v %v.", *estafetteBuildVersion, releaseName, status)
+		if releaseAction != "" {
+			description = fmt.Sprintf("Release %v to %v with %v %v.", *estafetteBuildVersion, releaseName, releaseAction, status)
+		}
 	}
+
+	params := buildStatusRequestBody{
+		State:       state,
+		Key:         "estafette",
+		Name:        "Estafette",
+		URL:         logsURL,
+		Description: description,
+	}
+
+	// {
+	// 	"state": "<INPROGRESS|SUCCESSFUL|FAILED>",
+	// 	"key": "<build-key>",
+	// 	"name": "<build-name>",
+	// 	"url": "<build-url>",
+	// 	"description": "<build-description>"
+	// }
 
 	log.Printf("Setting logs url %v", params.URL)
 
