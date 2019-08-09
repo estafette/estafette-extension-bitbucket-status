@@ -62,7 +62,7 @@ releases:
   dev:
     triggers:
     - pipeline:
-        name: github.com/estafette/estafette-ci-builder
+        name: github.com/estafette/estafette-extension-bitbucket-status
         branch: .+
     stages:
       tag-container-image:
