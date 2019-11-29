@@ -7,7 +7,7 @@ require (
 	github.com/alecthomas/colour v0.0.0-20160524082231-60882d9e2721 // indirect
 	github.com/alecthomas/kingpin v2.2.5+incompatible
 	github.com/alecthomas/repr v0.0.0-20181024024818-d37bc2a10ba1 // indirect
-	github.com/estafette/estafette-foundation v0.0.34
+	github.com/estafette/estafette-foundation v0.0.36
 	github.com/mattn/go-isatty v0.0.6 // indirect
 	github.com/sergi/go-diff v1.0.0 // indirect
 	github.com/sethgrid/pester v0.0.0-20170816164208-a86a2d88f4dc
