@@ -34,7 +34,6 @@ var (
 	releaseName           = kingpin.Flag("release-name", "Name of the release section, automatically set by Estafette CI.").Envar("ESTAFETTE_RELEASE_NAME").String()
 	releaseAction         = kingpin.Flag("release-action", "Name of the release action, automatically set by Estafette CI.").Envar("ESTAFETTE_RELEASE_ACTION").String()
 
-	apiTokenJSON = kingpin.Flag("credentials", "Bitbucket api token credentials configured at the CI server, passed in to this trusted extension.").Envar("ESTAFETTE_CREDENTIALS_BITBUCKET_API_TOKEN").String()
 	apiTokenPath = kingpin.Flag("credentials-path", "Path to file with Bitbucket api token credentials configured at the CI server, passed in to this trusted extension.").Default("/credentials/bitbucket_api_token.json").String()
 )
 
@@ -73,11 +72,6 @@ func main() {
 			log.Warn().Str("data", string(credentialsFileContent)).Msgf("Found 0 credentials in file %v", *apiTokenPath)
 		}
 		log.Debug().Msgf("Read %v credentials", len(credentials))
-	} else {
-		err := json.Unmarshal([]byte(*apiTokenJSON), &credentials)
-		if err != nil {
-			log.Fatal().Err(err).Msg("Failed unmarshalling injected credentials")
-		}
 	}
 	if len(credentials) == 0 {
 		log.Fatal().Msg("No credentials have been injected")
