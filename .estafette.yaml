@@ -13,7 +13,7 @@ version:
 
 stages:
   build:
-    image: golang:1.15.6-alpine3.12
+    image: golang:1.15.7-alpine3.13
     env:
       CGO_ENABLED: 0
       GOOS: linux
@@ -82,13 +82,14 @@ releases:
     clone: true
     stages:
       build:
-        image: estafette/golang:1.15.6-windowsservercore-ltsc2019
+        image: golang:1.15.7-nanoserver-1809
+        shell: cmd
         env:
           CGO_ENABLED: 0
           GOOS: windows
           GOARCH: amd64
         commands:
-        - go build -v -ldflags "-X main.app=$env:ESTAFETTE_GIT_NAME -X main.version=$env:ESTAFETTE_BUILD_VERSION -X main.revision=$env:ESTAFETTE_GIT_REVISION -X main.branch=$env:ESTAFETTE_GIT_BRANCH -X main.buildDate=$env:ESTAFETTE_BUILD_DATETIME" -o ./publish/$env:ESTAFETTE_GIT_NAME.exe
+        - go build -v -ldflags "-X main.app=%ESTAFETTE_GIT_NAME% -X main.version=%ESTAFETTE_BUILD_VERSION% -X main.revision=%ESTAFETTE_GIT_REVISION% -X main.branch=%ESTAFETTE_GIT_BRANCH% -X main.buildDate=%ESTAFETTE_BUILD_DATETIME%" -o ./publish/%ESTAFETTE_GIT_NAME%.exe
 
       bake:
         image: extensions/docker:windowsservercore-ltsc2019
@@ -98,7 +99,7 @@ releases:
         container: bitbucket-status
         repositories:
         - extensions
-        dockerfile: Dockerfile.windowsservercore-ltsc2019
+        dockerfile: Dockerfile.nanoserver-1809
         path: ./publish
 
       push-to-docker-hub:
@@ -108,7 +109,7 @@ releases:
         repositories:
         - extensions
         tags:
-        - windowsservercore-ltsc2019
+        - nanoserver-1809
         pushVersionTag: false
 
   dev:
