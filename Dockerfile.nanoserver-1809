@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/windows/servercore:ltsc2019
 
-COPY estafette-extension-bitbucket-status.exe c:/estafette-extension-bitbucket-status.exe
+COPY ./estafette-extension-bitbucket-status.exe c:/estafette-extension-bitbucket-status.exe
 
 ENV ESTAFETTE_LOG_FORMAT="console"
 
